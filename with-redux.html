@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.1.0/redux.js"></script>
+    
+</head>
+<body>
+
+    <style>
+        .container{
+            border: 5px solid black;
+            padding: 10px;
+        }
+    </style>
+    
+    <div id="red"></div>
+    <div id="blue"></div>
+    <div id="green"></div>
+
+    <script>
+        // store 를 만들면 내부적으로 state 값이 생기고 state 값을 가져올때는 getState를 써야한다. 
+        // reducer를 통해서 state 값을 만들어줘야 하는데 이때 state 값이 undefined 라면 초기화를 위해서 최초로 실행되는 reducer에 대한 호출이기 떄문에 
+        // 원하는 초기값을 return 해주면 redux의 store에는 초기값이 지정된다. 
+        // 그리고 아래와 같은 경우 var state 로 store.getState를 지정해두고 state의 color를 가져온다 
+
+        function reducer(state, action) {
+            console.log(state, action);
+            if(state === undefined){
+                return {color:'yellow'}
+            }
+            var newState;
+            if(action.type === 'CHANGE_COLOR'){
+                newState = Object.assign({}, state, {color:action.color});
+            }
+            return newState;
+        }
+
+        var store = Redux.createStore(
+            reducer,
+            window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+        );
+
+        function red() {
+            var state = store.getState();
+            document.querySelector('#red').innerHTML = `    
+                <div class="container" id="component_red" style="background-color:${state.color}">
+                    <h1>red</h1>
+                    <input type="button" value="fire" onclick="
+                        store.dispatch({type:'CHANGE_COLOR', color:'red'});
+                    ">
+                </div>
+            `;
+        
+        }
+
+        store.subscribe(red);
+
+        red();
+        
+        function blue() {
+            var state = store.getState();
+            document.querySelector('#blue').innerHTML = `    
+                <div class="container" id="component_blue" style="background-color:${state.color}">
+                    <h1>blue</h1>
+                    <input type="button" value="fire" onclick="
+                        store.dispatch({type:'CHANGE_COLOR', color:'blue'});
+                    ">
+                </div>
+            `;
+        
+        }
+
+        store.subscribe(blue);
+
+        blue();
+
+        function green() {
+            var state = store.getState();
+            document.querySelector('#green').innerHTML = `    
+                <div class="container" id="component_green" style="background-color:${state.color}">
+                    <h1>green</h1>
+                    <input type="button" value="fire" onclick="
+                        store.dispatch({type:'CHANGE_COLOR', color:'green'});
+                    ">
+                </div>
+            `;
+        
+        }
+
+        store.subscribe(green);
+
+        green();
+
+        
+    </script>
+
+    
+</body>
+</html>
